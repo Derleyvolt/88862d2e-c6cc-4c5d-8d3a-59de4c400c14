@@ -215,7 +215,7 @@ function fillTable() {
 
     console.log(filteredGames.length);
 
-    pagination = new Pagination(len, resultsPerPage, 10, 'pagination', filteredGames);
+    pagination = new Pagination(len, resultsPerPage, 5, 'pagination', filteredGames);
     
     pagination.render();
     
