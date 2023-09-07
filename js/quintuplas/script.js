@@ -123,7 +123,7 @@ function genModalToChoice(type) {
 
                     <div class="modal-body">
                         <div class="d-flex justify-content-center">
-                            <div class="d-inline-block p-0" id="contentNumbers">
+                            <div class="d-inline-block p-0" id="contentNumbers1">
                             </div>    
                         </div>
                     </div>
@@ -140,7 +140,7 @@ function genModalToChoice(type) {
         let btnId = guid();
 
         if(i % 5 == 0) {
-            $('#contentNumbers').append(`
+            $('#contentNumbers1').append(`
                 <div class="row">
             `);
         }
@@ -153,7 +153,7 @@ function genModalToChoice(type) {
             color = 'btn-danger';
         }
 
-        $('#contentNumbers').append(`
+        $('#contentNumbers1').append(`
             <button class="btn rounded-circle border ${color}" id="${btnId}">
                 ${(i+1) < 10 ? '0' + (i+1) : i+1}
             </button>
@@ -184,7 +184,7 @@ function genModalToChoice(type) {
         });
 
         if((i+1)%5 == 0) {
-            $('#contentNumbers').append(`
+            $('#contentNumbers1').append(`
                 </div>
             `);
         }
@@ -226,7 +226,7 @@ function genModal(game) {
 
         if(numberSet.has(i+1)) {
             $('#contentNumbers').append(`
-            <button class="btn rounded-circle border bg-success">
+                <button class="btn rounded-circle border bg-success">
                     ${(i+1) < 10 ? '0' + (i+1) : i+1}
                 </button>
             `);
