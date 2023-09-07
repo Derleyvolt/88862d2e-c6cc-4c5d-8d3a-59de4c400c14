@@ -41,7 +41,7 @@ class Pagination {
 
     render() {
         $(this._nodeId).append(`
-            <li class="page-item ${this._currentIndex == 0 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="pagination.prev()">Previous</a></li>
+            <li class="page-item ${this._currentIndex == 0 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="pagination.prev(event)">Previous</a></li>
         `
         );
 
@@ -60,11 +60,12 @@ class Pagination {
         }
 
         $(this._nodeId).append(`
-            <li class="page-item ${this._currentIndex+1 >= this._rows ? 'disabled' : ''}"><a class="page-link" href="#" onclick="pagination.next()">Next</a></li>
+            <li class="page-item ${this._currentIndex+1 >= this._rows ? 'disabled' : ''}"><a class="page-link" href="#" onclick="pagination.next(event)">Next</a></li>
         `);
     }
 
-    next() {
+    next(event) {
+        event.preventDefault();
         this._currentIndex += 1;
 
         if (this._startIndex + this._indexesCount < this._rows) {
@@ -79,7 +80,8 @@ class Pagination {
         this.render();
     }
 
-    prev() {
+    prev(event) {
+        event.preventDefault();
         if (this._endIndex - this._indexesCount > 0) {
             this._endIndex = this._currentIndex;
         }
