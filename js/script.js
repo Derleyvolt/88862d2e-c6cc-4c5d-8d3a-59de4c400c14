@@ -78,6 +78,9 @@ function loadConfig(configName) {
     for(var [id, value] of Object.entries(config.filters)) {
         $(id).val(value);
     }
+
+    includedNumbers = config.included;
+    excludedNumbers = config.excluded;
 }
 
 function saveConfig() {
@@ -87,6 +90,8 @@ function saveConfig() {
         let config = {
             filters: getRestrictionsToLoad(),
             relations: getRelationsToLoad(),
+            excluded: excludedNumbers,
+            included: includedNumbers,
         }
     
         localStorage.setItem(name, JSON.stringify(config));

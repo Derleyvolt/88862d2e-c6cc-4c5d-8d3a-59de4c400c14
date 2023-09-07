@@ -101,8 +101,94 @@ class Pagination {
     }
 }
 
+function closeModalToChoice() {
+    $('#myModalChoice').modal('toggle');
+}
+
 function closeModal() {
     $('#myModal').modal('toggle');
+}
+
+let includedNumbers = [];
+let excludedNumbers = [];
+
+function genModalToChoice(type) {
+    $('body').append(`
+        <div id="myModalChoice" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-center">${ type == 'include' ? 'Escolha as dezenas a serem incluídas' : 'Escolha as dezenas a serem excluídas' }</h5>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-center">
+                            <div class="d-inline-block p-0" id="contentNumbers">
+                            </div>    
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalToChoice()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `);
+
+    for(var i = 0; i < 25; i++) {
+        let btnId = guid();
+
+        if(i % 5 == 0) {
+            $('#contentNumbers').append(`
+                <div class="row">
+            `);
+        }
+
+        let color = '';
+
+        if(includedNumbers.indexOf(i+1) != -1) {
+            color = 'btn-success';
+        } else if(excludedNumbers.indexOf(i+1) != -1) {
+            color = 'btn-danger';
+        }
+
+        $('#contentNumbers').append(`
+            <button class="btn rounded-circle border ${color}" id="${btnId}">
+                ${(i+1) < 10 ? '0' + (i+1) : i+1}
+            </button>
+        `);
+
+        $('#'+btnId).on('click', function(event) {
+            if(this.classList.contains('btn-success') && type=='include') {
+                this.classList.remove('btn-success');
+                let number = Number(this.textContent);
+                includedNumbers = includedNumbers.filter(e => e != number);
+
+            } else if(this.classList.contains('btn-danger') && type=='exclude') {
+                this.classList.remove('btn-danger');
+                let number = Number(this.textContent);
+                excludedNumbers = excludedNumbers.filter(e => e != number);
+            } else if(!this.classList.contains('btn-success') && !this.classList.contains('btn-danger')) {
+                this.classList.add(type == 'include' ? 'btn-success' : 'btn-danger');
+    
+                if(type == 'include') {
+                    includedNumbers.push(Number(this.textContent));
+                } else {
+                    excludedNumbers.push(Number(this.textContent));
+                }
+            }
+
+            console.log(includedNumbers);
+            console.log(excludedNumbers);
+        });
+
+        if((i+1)%5 == 0) {
+            $('#contentNumbers').append(`
+                </div>
+            `);
+        }
+    }
 }
 
 function genModal(game) {
@@ -140,13 +226,13 @@ function genModal(game) {
 
         if(numberSet.has(i+1)) {
             $('#contentNumbers').append(`
-            <button class="rounded-circle border bg-success col">
+            <button class="btn rounded-circle border bg-success">
                     ${(i+1) < 10 ? '0' + (i+1) : i+1}
                 </button>
             `);
         } else {
             $('#contentNumbers').append(`
-            <button class="rounded-circle border col">
+            <button class="btn rounded-circle border">
                     ${(i+1) < 10 ? '0' + (i+1) : i+1}
                 </button>
             `);
@@ -180,6 +266,14 @@ function clearTable() {
     table.html('');
 }
 
+function showModalChoice(type) {
+    $('#myModalChoice').remove();
+    
+    genModalToChoice(type);
+
+    $('#myModalChoice').modal('show');
+}
+
 function showModal(element) {
     let rowIndex = element.parentElement.parentElement.rowIndex;
     let page     = pagination.getSelectedIndex();
@@ -189,8 +283,6 @@ function showModal(element) {
         numberGame: (page * pagination._rowsPerPage) + rowIndex,
         numbers: content[1]
     }
-
-    console.log(game.numbers);
 
     $('#myModal').remove();
     
@@ -203,7 +295,25 @@ function getFilteredGames() {
     let edges        = getRelations();
     let restrictions = getRestrictions();
 
-    return calcGames(restrictions, edges);
+    let result = calcGames(restrictions, edges);
+
+    result = result.filter((arr) => {
+        for(var e of excludedNumbers) {
+            if (arr[1].indexOf(e) != -1) {
+                return false;
+            }
+        }
+
+        for(var e of includedNumbers) {
+            if (arr[1].indexOf(e) == -1) {
+                return false;
+            }
+        }
+        
+        return true;
+    });
+
+    return result;
 }
 
 var pagination;

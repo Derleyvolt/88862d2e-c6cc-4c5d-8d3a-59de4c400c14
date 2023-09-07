@@ -21,8 +21,21 @@ function genFilters(filters) {
                     </div>
                 </div>
             </div>
-        </div>`)
+        </div>`);
+
     }
+
+    $('.mainFilter').append(`
+        <div class="mt-2 card col-12">
+            <div class="card-header">
+            <strong> Incluir e Excluir </strong>
+            </div>
+            <div class="d-flex m-2 justify-content-center">
+                <button class="btn btn-primary me-2" onclick="showModalChoice('include')"> Incluir </button>
+                <button class="btn btn-primary" onclick="showModalChoice('exclude')"> Excluir </button>
+            </div>
+        </div>
+    `);
 }
 
 // this function saves component ids to load them more easily
