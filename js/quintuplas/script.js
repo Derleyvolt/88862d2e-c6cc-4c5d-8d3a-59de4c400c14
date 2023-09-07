@@ -29,8 +29,9 @@ class Pagination {
         }
     }
 
-    getPageFromIndex(value) {
-        value = Number(value);
+    getPageFromIndex(event) {
+        event.preventDefault();
+        let value = Number(event.target.textContent);
 
         this._currentIndex = value-1;
         this.reloadTable();
@@ -47,17 +48,16 @@ class Pagination {
         for(var i = this._startIndex; i < this._endIndex; i++) {
             if(i == this._currentIndex) {
                 $(this._nodeId).append(`
-                    <li class="page-item active"><a class="page-link" href="#" onclick="pagination.getPageFromIndex(this.textContent)">${i+1}</a></li>
+                    <li class="page-item active"><a class="page-link" href="#" onclick="pagination.getPageFromIndex(event)">${i+1}</a></li>
                 `
                 );
             } else {
                 $(this._nodeId).append(`
-                    <li class="page-item"><a class="page-link" href="#" onclick="pagination.getPageFromIndex(this.textContent)">${i+1}</a></li>
+                    <li class="page-item"><a class="page-link" href="#" onclick="pagination.getPageFromIndex(event)">${i+1}</a></li>
                 `
                 );   
             }
         }
-
 
         $(this._nodeId).append(`
             <li class="page-item ${this._currentIndex+1 >= this._rows ? 'disabled' : ''}"><a class="page-link" href="#" onclick="pagination.next()">Next</a></li>

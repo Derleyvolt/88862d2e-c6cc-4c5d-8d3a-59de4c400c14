@@ -25,6 +25,24 @@ function genFilters(filters) {
     }
 }
 
+// this function saves component ids to load them more easily
+function getRestrictionsToLoad() {
+    const restrictions = {
+    };
+
+    const restrictionsName = ['pares', 'moldura', 'primos', 'repetidos', 'm3', 'fib', 'soma'];
+
+    for(var i = 0; i < filters.length; i++) {
+        let min = $(`#${restrictionsName[i] + '-' + 'min'}`).val();
+        let max = $(`#${restrictionsName[i] + '-' + 'max'}`).val();
+
+        restrictions[`#${restrictionsName[i] + '-' + 'min'}`] = min;
+        restrictions[`#${restrictionsName[i] + '-' + 'max'}`] = max;
+    }
+
+    return restrictions;
+}
+
 function getRestrictions() {
     const restrictions = {
     };

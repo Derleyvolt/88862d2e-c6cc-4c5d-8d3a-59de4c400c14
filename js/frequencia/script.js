@@ -83,6 +83,49 @@ function genContentLine() {
     }
 }
 
+function getRelationsToLoad() {
+    let relations = {
+    };
+
+    let countl = [];
+
+    let sum = 0;
+
+    for(var i = 0; i < 5; i++) {
+        let aux = Number($(`#count-l${i+1}`).val(), 10);
+        countl.push(aux);
+        sum += aux;
+
+        relations[`#count-l${i+1}`] = aux;
+    }
+
+    if(sum != 15) {
+        alert('A soma dos números por linha deve ser 15.');
+        return undefined;
+    }
+
+    for(var i = 0; i < 5; i++) {
+        for(var j = 0; j < 5; j++) {
+            let aux = [];
+            for(var k = 0; k < countl[i]; k++) {
+                if(isNaN(parseInt($(`#line${i+1}-${j+1}-${k+1}`).val()))) {
+                    alert(`Há um campo vazio na linha ${i+1} no número ${i*5+1+j} na célula ${k+1}`);
+                    return undefined;
+                }
+
+                let componentId = `#line${i+1}-${j+1}-${k+1}`;
+
+                //aux.push([componentId, Number($(`#line${i+1}-${j+1}-${k+1}`).val())]);
+                relations[componentId] = $(`#line${i+1}-${j+1}-${k+1}`).val();
+            }
+            
+            //edges.push(aux);
+        }
+    }
+
+    return relations;
+}
+
 function getRelations() {
     let edges = [];
 
