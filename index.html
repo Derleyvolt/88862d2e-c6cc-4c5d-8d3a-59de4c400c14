@@ -114,25 +114,46 @@
                                 <div class="d-flex justify-content-center">
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination">
-                                            <!-- <li class="page-item"><a class="page-link" href="#" onclick="previous()">Previous</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
                                         </ul>
                                     </nav>
                                 </div>
                             </div>
 
-                            <div>
-                                <button class="btn btn-success" onclick="fillTable()"> Gerar jogos </button>
+                            <div class="d-flex col-12">
+                                <div class="col-4">
+                                    <button class="btn btn-success w-auto" onclick="fillTable()"> Gerar </button>
+                                </div>
+                                <div class="d-flex flex-row-reverse col-8">
+                                    <div class="col-8 ms-3 mw-25">
+                                        <input id="configName"class="form-control" type="text" placeholder="Digite o nome">
+                                    </div>
+                                    <button class="btn btn-secondary" onclick="saveConfig()"> Salvar </button>
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-3 flex-row-reverse">
+                                <div class="col-12">
+                                    <select id="selectConfig" class="form-select" onchange="loadSelectedOption()" onclick="fillSelect()">
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+
+        <script>
+            function escrever() {
+                alert($('#in1').val());
+                localStorage.setItem('teste', $('#in1').val());
+            }
+
+            function ler() {
+                alert(localStorage.getItem('dezenas'));
+            }
+        </script>
 
         <script src="./js/filters/script.js"></script>
         <script src="./js/quintuplas/script.js"></script>
