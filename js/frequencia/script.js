@@ -68,15 +68,18 @@ function genContentLine() {
 
         for(var k = 0; k < 5; k++) {
             for(var j = 0; j < Math.max(countl[i], 0); j++) {
-                if(j == 0) {
-                    $(`.line${i+1}-${k+1}`).append(`
-                        <input type="number" class="w-100 mb-1" id="line${i+1}-${k+1}-${j+1}" value=${i*5+1+k} disabled readonly>
-                    `);
-                }  else {
-                    $(`.line${i+1}-${k+1}`).append(`
-                        <input type="number" class="w-100 mb-1" id="line${i+1}-${k+1}-${j+1}">
-                    `);
-                }
+                $(`.line${i+1}-${k+1}`).append(`
+                    <input type="number" class="w-100 mb-1" id="line${i+1}-${k+1}-${j+1}">
+                `);
+                // if(j == 0) {
+                //     $(`.line${i+1}-${k+1}`).append(`
+                //         <input type="number" class="w-100 mb-1" id="line${i+1}-${k+1}-${j+1}" value=${i*5+1+k}>
+                //     `);
+                // }  else {
+                //     $(`.line${i+1}-${k+1}`).append(`
+                //         <input type="number" class="w-100 mb-1" id="line${i+1}-${k+1}-${j+1}">
+                //     `);
+                // }
                 // i*5+1+k
             }
         }
@@ -173,7 +176,7 @@ function preencherInputs() {
 
     for(var i = 0; i < 5; i++) {
         for(var j = 0;  j < 5; j++) {
-            for(var k = 1; k < countl[i]; k++) {
+            for(var k = 0; k < countl[i]; k++) {
                 if(i*5+1+j+k < i*5+1+5) {
                     $(`#line${i+1}-${j+1}-${k+1}`).val(i*5+1+j+k);
                 } else {
