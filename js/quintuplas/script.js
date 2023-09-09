@@ -179,8 +179,6 @@ function genModalToChoice(type) {
                 }
             }
 
-            console.log(includedNumbers);
-            console.log(excludedNumbers);
         });
 
         if((i+1)%5 == 0) {
@@ -192,6 +190,23 @@ function genModalToChoice(type) {
 }
 
 function genModal(game) {
+    let numbers = new Set(game.numbers);
+
+    let applyFilter = [...numbers];
+
+    let statistic = {
+        "pares": applyFilter.reduce((prev, cur) => prev + Number(cur % 2 == 0), 0),
+        "impares": 0,
+        "soma": applyFilter.reduce((prev, cur) => prev + cur, 0),
+        "primos": applyFilter.reduce((prev, cur) => prev + Number(primes.has(cur)), 0),
+        "moldura": applyFilter.reduce((prev, cur) => prev + Number(moldura.has(cur)), 0),
+        "múltimos 3": applyFilter.reduce((prev, cur) => prev + Number(cur % 3 == 0), 0),
+        "repetidos": applyFilter.reduce((prev, cur) => prev + Number(repeated.has(cur)), 0),
+        "fibonacci": applyFilter.reduce((prev, cur) => prev + Number(fib.has(cur)), 0)
+    };
+
+    statistic.impares = 15 - statistic.pares;
+
     $('body').append(`
         <div id="myModal" class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -204,16 +219,36 @@ function genModal(game) {
                         <div class="d-flex justify-content-center">
                             <div class="d-inline-block p-0" id="contentNumbers">
                             </div>    
+
+                        </div>
+                        
+                        <div class="container m-2">
+                            <div class="row col-12 justify-content-center" id="statistics">
+                            
+                            </div>
                         </div>
                     </div>
                     
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+
+                        <div class="d-flex ">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     `);
+
+    for(var e of Object.entries(statistic)) {
+        $('#statistics').append(`
+            <div class="rounded border border-primary ps-1 pe-1 m-1 w-auto">
+                <div class="col">
+                    <small> ${e[0]}: ${e[1]} </small>
+                </div>
+            </div>
+        `);
+    }
 
     const numberSet = new Set(game.numbers);
 
