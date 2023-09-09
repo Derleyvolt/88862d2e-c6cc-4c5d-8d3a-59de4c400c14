@@ -189,23 +189,42 @@ function genModalToChoice(type) {
     }
 }
 
+let resultsSelectedFilterColor = {
+
+};
+
 function genModal(game) {
+    // clear selected filters
+    for(let i = 0; i < 25; i++) {
+        resultsSelectedFilterColor[i+1] = 0;
+    }
+
     let numbers = new Set(game.numbers);
 
     let applyFilter = [...numbers];
 
-    let statistic = {
+    let statisticEnum = {
+        "pares": applyFilter.filter(e => e % 2 == 0),
+        "impares": applyFilter.filter(e => e % 2),
+        "primos": applyFilter.filter(e => primes.has(e)),
+        "moldura": applyFilter.filter(e => moldura.has(e)),
+        "múltiplos 3": applyFilter.filter(e => e % 3 == 0),
+        "repetidos": applyFilter.filter(e => repeated.has(e)),
+        "fibonacci": applyFilter.filter(e => fib.has(e)),
+    }
+
+    let statisticCount = {
         "pares": applyFilter.reduce((prev, cur) => prev + Number(cur % 2 == 0), 0),
         "impares": 0,
         "soma": applyFilter.reduce((prev, cur) => prev + cur, 0),
         "primos": applyFilter.reduce((prev, cur) => prev + Number(primes.has(cur)), 0),
         "moldura": applyFilter.reduce((prev, cur) => prev + Number(moldura.has(cur)), 0),
-        "múltimos 3": applyFilter.reduce((prev, cur) => prev + Number(cur % 3 == 0), 0),
+        "múltiplos 3": applyFilter.reduce((prev, cur) => prev + Number(cur % 3 == 0), 0),
         "repetidos": applyFilter.reduce((prev, cur) => prev + Number(repeated.has(cur)), 0),
         "fibonacci": applyFilter.reduce((prev, cur) => prev + Number(fib.has(cur)), 0)
     };
 
-    statistic.impares = 15 - statistic.pares;
+    statisticCount.impares = 15 - statisticCount.pares;
 
     $('body').append(`
         <div id="myModal" class="modal" tabindex="-1" role="dialog">
@@ -240,14 +259,43 @@ function genModal(game) {
         </div>
     `);
 
-    for(var e of Object.entries(statistic)) {
+    for(let filter of Object.entries(statisticCount)) {
+        let id = guid();
         $('#statistics').append(`
-            <div class="rounded border border-primary ps-1 pe-1 m-1 w-auto">
-                <div class="col">
-                    <small> ${e[0]}: ${e[1]} </small>
+            <div class="rounded ${filter[0] == 'soma' ? '' : 'border'} border-primary ps-1 pe-1 m-1 w-auto">
+                <div class="col" id="${id}">
+                    <small> ${filter[0]}: ${filter[1]} </small>
                 </div>
             </div>
         `);
+
+        if(filter[0] != 'soma') {
+            $('#' + id).on('click', function(event) {
+                let parentClass = this.parentElement.classList;
+
+                if(!parentClass.contains('bg-info')) {
+                    parentClass.add('bg-info');
+                    statisticEnum[filter[0]].forEach((i) => {
+                        let result = $(`#numberResult${i}`);
+                        result.removeClass('bg-success');
+                        result.addClass('bg-warning');
+                        resultsSelectedFilterColor[i]++; // store counter
+                    });
+                } else {
+                    statisticEnum[filter[0]].forEach((i) => {
+                        parentClass.remove('bg-info');
+
+                        let result = $(`#numberResult${i}`);
+                        resultsSelectedFilterColor[i]--;
+
+                        if(resultsSelectedFilterColor[i] == 0) {
+                            result.removeClass('bg-warning');
+                            result.addClass('bg-success');
+                        }
+                    });
+                }
+            });
+        }
     }
 
     const numberSet = new Set(game.numbers);
@@ -261,7 +309,7 @@ function genModal(game) {
 
         if(numberSet.has(i+1)) {
             $('#contentNumbers').append(`
-                <button class="btn rounded-circle border bg-success">
+                <button class="btn rounded-circle border bg-success" id="numberResult${i+1}">
                     ${(i+1) < 10 ? '0' + (i+1) : i+1}
                 </button>
             `);
@@ -352,9 +400,10 @@ function getFilteredGames() {
 }
 
 var pagination;
+let filteredGames = [];
 
 function fillTable() {
-    let filteredGames = getFilteredGames();
+    filteredGames = getFilteredGames();
     
     let len = filteredGames.length;
     
