@@ -1,3 +1,6 @@
+let last_cjl = [5, 5, 5, 5, 5];
+let dezenas = 15;
+
 function genLines() {
     for(var i = 0; i < 5; i++) {
         $('.lineBody').append(`
@@ -8,8 +11,12 @@ function genLines() {
 
             <div class="collapse" id="collapseExample${i+1}">
                 <div class="card-body d-flex justify-content-center align-items-center">
-                    <div id="line${i+1}">
+                    <div class"container">
+                        <div class"row">
+                            <div id="line${i+1}">
 
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -19,50 +26,44 @@ function genLines() {
 }
 
 function genContentLine() {
-    var countl = [];
-
+    //removing things to create new ones later
     for(var i = 0; i < 5; i++) {
-        countl.push(Number($(`#count-l${i+1}`).val(), 10));
-    }
-
-    for(var i = 0; i < 5; i++) {
-        for(var j = 0; j < 5; j++) {
-            let node = $(`.line${i+1}-${j+1}`);
-            if(node) {
-                node.remove();
-            }
+        let char = 'A';
+        let ch = char.charCodeAt(0);
+        for(var j = 0; j < last_cjl[i]; j++, ch++) {
+            let cc = String.fromCharCode(ch);
+            let node = $(`#line${i+1}-${cc}`);
+            if(node) node.remove();
         }
     }
 
+    var countl = [];
+    let cjl = [];
     for(var i = 0; i < 5; i++) {
-        for(var j = i*5+1; j <= (i+1)*5; j+=5) {
-            $(`#line${i+1}`).append(`
+        countl.push(Number($(`#count-l${i+1}`).val(), 10));
+        cjl.push(Number($(`#cj-line${i+1}`).val(), 10));
+    }
+    last_cjl = [...cjl];
+
+    for(var i = 0; i < 5; i++) {
+        $(`#line${i+1}`).append(`
             <div class="d-flex">
                 <div class="container">
-                    <div class="row">
-                        <div class="col line${i+1}-${1} border text-center">
-                            <h2 class=""> ${j} </h2>
-                        </div>
+                    <div class="row" id="row${i+1}">
 
-                        <div class="col line${i+1}-${2} border text-center">
-                            <h2 class=""> ${j+1} </h2>
-                        </div>
-
-
-                        <div class="col line${i+1}-${3} border text-center">
-                            <h2 class=""> ${j+2} </h2>
-                        </div>
-
-                        <div class="col line${i+1}-${4} border text-center">
-                            <h2 class=""> ${j+3} </h2>
-                        </div>
-
-                        <div class="col line${i+1}-${5} border text-center">
-                            <h2 class=""> ${j+4} </h2>
-                        </div>
                     </div>
                 </div>
             </div>
+        `);
+
+        let char = 'A';
+        let ch = char.charCodeAt(0);
+        for(var j = 0; j < cjl[i]; j++, ch++) {
+            let cc = String.fromCharCode(ch);
+            $(`#row${i+1}`).append(`
+                <div class="col border text-center" id="line${i+1}-${cc}">
+                    <h2 class=""> ${i+1}${cc} </h2>
+                </div>
             `);
         }
 
@@ -71,19 +72,22 @@ function genContentLine() {
                 $(`.line${i+1}-${k+1}`).append(`
                     <input type="number" class="w-100 mb-1" id="line${i+1}-${k+1}-${j+1}">
                 `);
-                // if(j == 0) {
-                //     $(`.line${i+1}-${k+1}`).append(`
-                //         <input type="number" class="w-100 mb-1" id="line${i+1}-${k+1}-${j+1}" value=${i*5+1+k}>
-                //     `);
-                // }  else {
-                //     $(`.line${i+1}-${k+1}`).append(`
-                //         <input type="number" class="w-100 mb-1" id="line${i+1}-${k+1}-${j+1}">
-                //     `);
-                // }
-                // i*5+1+k
+            }
+        }
+
+        char = 'A';
+        ch = char.charCodeAt(0);
+        for(let j = 0; j < cjl[i]; j++, ch++){
+            let cc = String.fromCharCode(ch);
+            for(let k = 0; k < countl[i]; k++){
+                $(`#line${i+1}-${cc}`).append(`
+                    <input type="number" class="w-100 mb-1" id="line${i+1}-${cc}-${k+1}">
+                `);
+
             }
         }
     }
+    // preencherInputs();
 }
 
 function getRelationsToLoad() {
@@ -102,27 +106,25 @@ function getRelationsToLoad() {
         relations[`#count-l${i+1}`] = aux;
     }
 
-    if(sum != 15) {
-        alert('A soma dos números por linha deve ser 15.');
+    if(sum != dezenas) {
+        alert(`A soma dos números por linha deve ser ${dezenas}.`);
         return undefined;
     }
 
     for(var i = 0; i < 5; i++) {
-        for(var j = 0; j < 5; j++) {
+        let char = 'A';
+        let ch = char.charCodeAt(0);
+        for(var j = 0; j < last_cjl[i]; j++, ch++) {
             let aux = [];
+            let cc = String.fromCharCode(ch);
             for(var k = 0; k < countl[i]; k++) {
-                if(isNaN(parseInt($(`#line${i+1}-${j+1}-${k+1}`).val()))) {
-                    alert(`Há um campo vazio na linha ${i+1} no número ${i*5+1+j} na célula ${k+1}`);
+                if(isNaN(parseInt($(`#line${i+1}-${cc}-${k+1}`).val()))) {
+                    alert(`Há um campo vazio na linha ${i+1} na coluna ${i+1}${cc} na célula ${k+1}`);
                     return undefined;
                 }
-
-                let componentId = `#line${i+1}-${j+1}-${k+1}`;
-
-                //aux.push([componentId, Number($(`#line${i+1}-${j+1}-${k+1}`).val())]);
-                relations[componentId] = $(`#line${i+1}-${j+1}-${k+1}`).val();
+                let componentId = `#line${i+1}-${cc}-${k+1}`;
+                relations[componentId] = $(`#line${i+1}-${cc}-${k+1}`).val();
             }
-            
-            //edges.push(aux);
         }
     }
 
@@ -142,21 +144,24 @@ function getRelations() {
         sum += aux;
     }
 
-    if(sum != 15) {
-        alert('A soma dos números por linha deve ser 15.');
+    if(sum != dezenas) {
+        alert(`A soma dos números por linha deve ser ${dezenas}.`);
         return undefined;
     }
 
     for(var i = 0; i < 5; i++) {
-        for(var j = 0; j < 5; j++) {
+        let char = 'A';
+        let ch = char.charCodeAt(0);
+        for(var j = 0; j < last_cjl[i]; j++, ch++) {
             let aux = [];
+            let cc = String.fromCharCode(ch);
             for(var k = 0; k < countl[i]; k++) {
-                if(isNaN(parseInt($(`#line${i+1}-${j+1}-${k+1}`).val()))) {
-                    alert(`Há um campo vazio na linha ${i+1} no número ${i*5+1+j} na célula ${k+1}`);
+                if(isNaN(parseInt($(`#line${i+1}-${cc}-${k+1}`).val()))) {
+                    alert(`Há um campo vazio na linha ${i+1} na coluna ${i+1}${cc} na célula ${k+1}`);
                     return undefined;
                 }
 
-                aux.push(Number($(`#line${i+1}-${j+1}-${k+1}`).val()));
+                aux.push(Number($(`#line${i+1}-${cc}-${k+1}`).val()));
             }
 
             edges.push(aux);
@@ -175,13 +180,15 @@ function preencherInputs() {
     }
 
     for(var i = 0; i < 5; i++) {
-        for(var j = 0;  j < 5; j++) {
+        let char = 'A';
+        let ch = char.charCodeAt(0);
+        let max = (i+1)*5;
+        let min = max-4;
+        for(var j = 0; j < last_cjl[i]; j++, ch++) {
+            let cc = String.fromCharCode(ch);
             for(var k = 0; k < countl[i]; k++) {
-                if(i*5+1+j+k < i*5+1+5) {
-                    $(`#line${i+1}-${j+1}-${k+1}`).val(i*5+1+j+k);
-                } else {
-                    $(`#line${i+1}-${j+1}-${k+1}`).val(i*5+1+j-k);
-                }
+                // $(`#line${i+1}-${cc}-${k+1}`).val(Math.round(Math.random() * (max - min) + min));
+                $(`#line${i+1}-${cc}-${k+1}`).val(min+k);
             }
         }
     }

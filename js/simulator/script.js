@@ -73,7 +73,6 @@ function selectGame(elem) {
         }
 
         choisenGame = allGamesMap[concurso];
-        console.log(choisenGame);
         drawResultInDOM('contentNumbersSimulator', allGamesMap[concurso]);
     }
 }
@@ -98,11 +97,6 @@ function searchMatches() {
             let textContent = obj.text();
             let text = textContent.split(': ')[0];
 
-            // console.log(textContent, acertos[1]);
-            // console.log(numMatches);
-            // console.log(acertos[0]);
-
-            
             if(numMatches >= 10+i) {
                 matches[i-1] += 1;
                 obj.text(text + ': ' + matches[i-1]);

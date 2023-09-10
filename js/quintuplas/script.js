@@ -14,14 +14,14 @@ class Pagination {
 
         this._currentIndex = 0;
     }
-    
+
     clear() {
         $(this._nodeId).html('');
     }
 
     reloadTable() {
         clearTable();
-    
+
         let startIndex = this._currentIndex * this._rowsPerPage;
 
         for(var i = startIndex; i < Math.min(startIndex + this._rowsPerPage, this._rows); i++) {
@@ -41,27 +41,27 @@ class Pagination {
 
     render() {
         $(this._nodeId).append(`
-            <li class="page-item ${this._currentIndex == 0 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="pagination.prev(event)">Previous</a></li>
-        `
+<li class="page-item ${this._currentIndex == 0 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="pagination.prev(event)">Previous</a></li>
+`
         );
 
         for(var i = this._startIndex; i < this._endIndex; i++) {
             if(i == this._currentIndex) {
                 $(this._nodeId).append(`
-                    <li class="page-item active"><a class="page-link" href="#" onclick="pagination.getPageFromIndex(event)">${i+1}</a></li>
-                `
+<li class="page-item active"><a class="page-link" href="#" onclick="pagination.getPageFromIndex(event)">${i+1}</a></li>
+`
                 );
             } else {
                 $(this._nodeId).append(`
-                    <li class="page-item"><a class="page-link" href="#" onclick="pagination.getPageFromIndex(event)">${i+1}</a></li>
-                `
+<li class="page-item"><a class="page-link" href="#" onclick="pagination.getPageFromIndex(event)">${i+1}</a></li>
+`
                 );   
             }
         }
 
         $(this._nodeId).append(`
-            <li class="page-item ${this._currentIndex+1 >= this._rows ? 'disabled' : ''}"><a class="page-link" href="#" onclick="pagination.next(event)">Next</a></li>
-        `);
+<li class="page-item ${this._currentIndex+1 >= this._rows ? 'disabled' : ''}"><a class="page-link" href="#" onclick="pagination.next(event)">Next</a></li>
+`);
     }
 
     next(event) {
@@ -73,8 +73,8 @@ class Pagination {
         }
 
         this._endIndex = this._startIndex + this._indexesCount > this._rows ? 
-                            this._endIndex = this._rows : this._startIndex + this._indexesCount;
-        
+            this._endIndex = this._rows : this._startIndex + this._indexesCount;
+
         this.reloadTable();
         this.clear();
         this.render();
@@ -89,8 +89,8 @@ class Pagination {
         this._currentIndex -= 1;
 
         this._startIndex = this._currentIndex - this._indexesCount < 0 ? 
-                            this._startIndex = 0 : this._endIndex - this._indexesCount;
-        
+            this._startIndex = 0 : this._endIndex - this._indexesCount;
+
         this.reloadTable();
         this.clear();
         this.render();
@@ -114,35 +114,35 @@ let excludedNumbers = [];
 
 function genModalToChoice(type) {
     $('body').append(`
-        <div id="myModalChoice" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title text-center">${ type == 'include' ? 'Escolha as dezenas a serem incluídas' : 'Escolha as dezenas a serem excluídas' }</h5>
-                    </div>
+<div id="myModalChoice" class="modal" tabindex="-1" role="dialog">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title text-center">${ type == 'include' ? 'Escolha as dezenas a serem incluídas' : 'Escolha as dezenas a serem excluídas' }</h5>
+</div>
 
-                    <div class="modal-body">
-                        <div class="d-flex justify-content-center">
-                            <div class="d-inline-block p-0" id="contentNumbers1">
-                            </div>    
-                        </div>
-                    </div>
-                    
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalToChoice()">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `);
+<div class="modal-body">
+<div class="d-flex justify-content-center">
+<div class="d-inline-block p-0" id="contentNumbers1">
+</div>    
+</div>
+</div>
+
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalToChoice()">Close</button>
+</div>
+</div>
+</div>
+</div>
+`);
 
     for(var i = 0; i < 25; i++) {
         let btnId = guid();
 
         if(i % 5 == 0) {
             $('#contentNumbers1').append(`
-                <div class="row">
-            `);
+<div class="row">
+`);
         }
 
         let color = '';
@@ -154,10 +154,10 @@ function genModalToChoice(type) {
         }
 
         $('#contentNumbers1').append(`
-            <button class="btn rounded-circle border ${color}" id="${btnId}">
-                ${(i+1) < 10 ? '0' + (i+1) : i+1}
-            </button>
-        `);
+<button class="btn rounded-circle border ${color}" id="${btnId}">
+${(i+1) < 10 ? '0' + (i+1) : i+1}
+</button>
+`);
 
         $('#'+btnId).on('click', function(event) {
             if(this.classList.contains('btn-success') && type=='include') {
@@ -171,7 +171,7 @@ function genModalToChoice(type) {
                 excludedNumbers = excludedNumbers.filter(e => e != number);
             } else if(!this.classList.contains('btn-success') && !this.classList.contains('btn-danger')) {
                 this.classList.add(type == 'include' ? 'btn-success' : 'btn-danger');
-    
+
                 if(type == 'include') {
                     includedNumbers.push(Number(this.textContent));
                 } else {
@@ -183,8 +183,8 @@ function genModalToChoice(type) {
 
         if((i+1)%5 == 0) {
             $('#contentNumbers1').append(`
-                </div>
-            `);
+</div>
+`);
         }
     }
 }
@@ -227,47 +227,47 @@ function genModal(game) {
     statisticCount.impares = 15 - statisticCount.pares;
 
     $('body').append(`
-        <div id="myModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title text-center">Jogo ${game.numberGame}</h5>
-                    </div>
+<div id="myModal" class="modal" tabindex="-1" role="dialog">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title text-center">Jogo ${game.numberGame}</h5>
+</div>
 
-                    <div class="modal-body">
-                        <div class="d-flex justify-content-center">
-                            <div class="d-inline-block p-0" id="contentNumbers">
-                            </div>    
+<div class="modal-body">
+<div class="d-flex justify-content-center">
+<div class="d-inline-block p-0" id="contentNumbers">
+</div>    
 
-                        </div>
-                        
-                        <div class="container m-2">
-                            <div class="row col-12 justify-content-center" id="statistics">
-                            
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="modal-footer">
+</div>
 
-                        <div class="d-flex ">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `);
+<div class="container m-2">
+<div class="row col-12 justify-content-center" id="statistics">
+
+</div>
+</div>
+</div>
+
+<div class="modal-footer">
+
+<div class="d-flex ">
+<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+`);
 
     for(let filter of Object.entries(statisticCount)) {
         let id = guid();
         $('#statistics').append(`
-            <div class="rounded ${filter[0] == 'soma' ? '' : 'border'} border-primary ps-1 pe-1 m-1 w-auto">
-                <div class="col" id="${id}">
-                    <small> ${filter[0]}: ${filter[1]} </small>
-                </div>
-            </div>
-        `);
+<div class="rounded ${filter[0] == 'soma' ? '' : 'border'} border-primary ps-1 pe-1 m-1 w-auto">
+<div class="col" id="${id}">
+<small> ${filter[0]}: ${filter[1]} </small>
+</div>
+</div>
+`);
 
         if(filter[0] != 'soma') {
             $('#' + id).on('click', function(event) {
@@ -303,28 +303,28 @@ function genModal(game) {
     for(var i = 0; i < 25; i++) {
         if(i % 5 == 0) {
             $('#contentNumbers').append(`
-                <div class="row">
-            `);
+<div class="row">
+`);
         }
 
         if(numberSet.has(i+1)) {
             $('#contentNumbers').append(`
-                <button class="btn rounded-circle border bg-success" id="numberResult${i+1}">
-                    ${(i+1) < 10 ? '0' + (i+1) : i+1}
-                </button>
-            `);
+<button class="btn rounded-circle border bg-success" id="numberResult${i+1}">
+${(i+1) < 10 ? '0' + (i+1) : i+1}
+</button>
+`);
         } else {
             $('#contentNumbers').append(`
-            <button class="btn rounded-circle border">
-                    ${(i+1) < 10 ? '0' + (i+1) : i+1}
-                </button>
-            `);
+<button class="btn rounded-circle border">
+${(i+1) < 10 ? '0' + (i+1) : i+1}
+</button>
+`);
         }
 
         if((i+1)%5 == 0) {
             $('#contentNumbers').append(`
-                </div>
-            `);
+</div>
+`);
         }
     }
 }
@@ -337,9 +337,9 @@ function fillRowTable(numbers) {
     }
 
     html = html.concat(`<td class="text-center ms-2">
-                    <button class="btn btn-primary btn-sm" onclick="showModal(this)"> Mostrar </button>
-                </td>
-    </tr>`)
+<button class="btn btn-primary btn-sm" onclick="showModal(this)"> Mostrar </button>
+</td>
+</tr>`)
 
     $('.table-body').append(html);
 }
@@ -351,7 +351,7 @@ function clearTable() {
 
 function showModalChoice(type) {
     $('#myModalChoice').remove();
-    
+
     genModalToChoice(type);
 
     $('#myModalChoice').modal('show');
@@ -368,7 +368,7 @@ function showModal(element) {
     }
 
     $('#myModal').remove();
-    
+
     genModal(game);
 
     $('#myModal').modal('show');
@@ -378,7 +378,7 @@ function getFilteredGames() {
     let edges        = getRelations();
     let restrictions = getRestrictions();
 
-    let result = calcGames(restrictions, edges);
+    let result = calcGames(restrictions, edges, last_cjl);
 
     result = result.filter((arr) => {
         for(var e of excludedNumbers) {
@@ -392,7 +392,7 @@ function getFilteredGames() {
                 return false;
             }
         }
-        
+
         return true;
     });
 
@@ -404,20 +404,21 @@ let filteredGames = [];
 
 function fillTable() {
     filteredGames = getFilteredGames();
-    
+
     let len = filteredGames.length;
-    
+
     $('.pagination').html('');
 
-    console.log(filteredGames.length);
 
     pagination = new Pagination(len, resultsPerPage, 5, 'pagination', filteredGames);
-    
+
     pagination.render();
-    
+
     clearTable();
 
     for(var i = 0; i < Math.min(resultsPerPage, len); i++) {
         fillRowTable(filteredGames[i][0]);
     }
+
+    alert(filteredGames.length + " jogos foram gerados!");
 }

@@ -19,7 +19,6 @@ fetch('https://loteriascaixa-api.herokuapp.com/api/lotofacil/latest')
 .then(res => {
     const repeatedArray = res.dezenas;
     for(let i = 0; i < repeatedArray.length; i++) repeated.add(Number(repeatedArray[i]));
-    console.log(repeated.values());
 });
 
 function check_even(game, restrictions){
@@ -82,21 +81,29 @@ function game_is_valid(game, restrictions){
     return true;
 }
 
-function calcGames(restrictions, edges){
+function calcGames(restrictions, edges, sets_per_line){
     let valid_games = [];
-    for(let a = 1; a <= 5; a++){
-        for(let b = 6; b <= 10; b++){
-            for(let c = 11; c <= 15; c++){
-                for(let d = 16; d <= 20; d++){
-                    for(let e = 21; e <= 25; e++){
+    let prefix = [sets_per_line[0]];
+    for(let i = 1; i < 5; i++) prefix.push(prefix[i-1]+sets_per_line[i]);
+    var char = 'A';
+    for(let a = 0; a < prefix[0]; a++){
+        let cha = String.fromCharCode(char.charCodeAt(0) + a);
+        for(let b = prefix[0]; b < prefix[1]; b++){
+            let chb = String.fromCharCode(char.charCodeAt(0) + (b-prefix[0]));
+            for(let c = prefix[1]; c < prefix[2]; c++){
+                let chc = String.fromCharCode(char.charCodeAt(0) + (c-prefix[1]));
+                for(let d = prefix[2]; d < prefix[3]; d++){
+                    let chd = String.fromCharCode(char.charCodeAt(0) + (d-prefix[2]));
+                    for(let e = prefix[3]; e < prefix[4]; e++){
+                        let che = String.fromCharCode(char.charCodeAt(0) + (e-prefix[3]));
                         let game = [];
-                        for(let n = 0; n < edges[a-1].length; n++) game.push(edges[a-1][n]);
-                        for(let n = 0; n < edges[b-1].length; n++) game.push(edges[b-1][n]);
-                        for(let n = 0; n < edges[c-1].length; n++) game.push(edges[c-1][n]);
-                        for(let n = 0; n < edges[d-1].length; n++) game.push(edges[d-1][n]);
-                        for(let n = 0; n < edges[e-1].length; n++) game.push(edges[e-1][n]);
+                        for(let n = 0; n < edges[a].length; n++) game.push(edges[a][n]);
+                        for(let n = 0; n < edges[b].length; n++) game.push(edges[b][n]);
+                        for(let n = 0; n < edges[c].length; n++) game.push(edges[c][n]);
+                        for(let n = 0; n < edges[d].length; n++) game.push(edges[d][n]);
+                        for(let n = 0; n < edges[e].length; n++) game.push(edges[e][n]);
                         if(game_is_valid(game, restrictions))
-                            valid_games.push([[a, b, c, d, e], game]);
+                            valid_games.push([["1"+cha, "2"+chb, "3"+chc, "4"+chd, "5"+che], game]);
                     }
                 }
             }
@@ -104,51 +111,3 @@ function calcGames(restrictions, edges){
     }
     return valid_games;
 }
-
-let edges = [];
-edges.push([1, 2, 3]);
-edges.push([1, 2, 3]);
-edges.push([1, 2, 3]);
-edges.push([3, 4, 5]);
-edges.push([3, 4, 5]);
-
-edges.push([6, 7, 8]);
-edges.push([6, 7, 8]);
-edges.push([6, 7, 8]);
-edges.push([8, 9, 10]);
-edges.push([8, 9, 10]);
-
-edges.push([11, 12, 13]);
-edges.push([11, 12, 13]);
-edges.push([11, 12, 13]);
-edges.push([13, 14, 15]);
-edges.push([13, 14, 15]);
-
-edges.push([16, 17, 18]);
-edges.push([16, 17, 18]);
-edges.push([16, 17, 18]);
-edges.push([18, 19, 20]);
-edges.push([18, 19, 20]);
-
-edges.push([21, 22, 23]);
-edges.push([21, 22, 23]);
-edges.push([21, 22, 23]);
-edges.push([23, 24, 25]);
-edges.push([23, 24, 25]);
-
-
-let restrictions = {
-    pares: [7, 7],
-    impares: [8, 8],
-    moldura: [9, 9],
-    primos: [5, 6],
-    repetidos: [0, 3000],
-    m3: [0, 5],
-    fib: [0, 5],
-    soma: [120, 200]
-};
-// soma: [120, 280]
-
-// console.log(edges);
-// console.log(restrictions);
-// console.log(calcGames(restrictions, edges));
