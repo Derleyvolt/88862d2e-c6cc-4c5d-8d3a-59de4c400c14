@@ -182,23 +182,18 @@
                                     <select id="selectConfig" class="form-select" onchange="loadSelectedOption()" onclick="fillSelect()">
                                     </select>
                                 </div>
+
+                                <div>
+                                    <button class="btn btn-dark mt-2" onclick="removerConfig()">
+                                        Remover configuração atual
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <script>
-            function escrever() {
-                alert($('#in1').val());
-                localStorage.setItem('teste', $('#in1').val());
-            }
-
-            function ler() {
-                alert(localStorage.getItem('dezenas'));
-            }
-        </script>
 
         <script src="./js/filters/script.js"></script>
         <script src="./js/quintuplas/script.js"></script>

@@ -56,6 +56,10 @@ function fillSelect() {
     `);
 
     for(var i of Object.keys(localStorage)) {
+        if(i.indexOf('#') == 0) {
+            continue;
+        }
+
         $('#selectConfig').append(`
             <option ${select == i ? 'selected' : ''}>${i}</option>
         `);
@@ -70,7 +74,7 @@ function loadConfig(configName) {
 
         // crio os inputs dinâmicos quando termino de preencher os inputs relativos
         // às frequências.
-        if(id == '#count-l5') {
+        if(id == '#cj-line5') {
             genContentLine();
         }
     }
@@ -98,6 +102,15 @@ function saveConfig() {
         genAlert('primary', 'Salvo!');
     }
 
+}
+
+function removerConfig() {
+    let configName = $('#selectConfig').val();
+
+    console.log(configName);
+
+    localStorage.removeItem(configName);
+    genAlert('success', 'Configuração apagada!');
 }
 
 fillSelect();

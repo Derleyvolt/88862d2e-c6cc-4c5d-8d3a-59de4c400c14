@@ -20,12 +20,12 @@ async function fillSimulatorSelect() {
 
         lotofacil = Object.entries(lotofacil).sort((a, b) => b[0] - a[0]);
 
-        localStorage.setItem('lotofacil', JSON.stringify(lotofacil));
+        localStorage.setItem('#lotofacil', JSON.stringify(lotofacil));
     } catch(err) {
         console.log(err);
     }
 
-    allGames = JSON.parse(localStorage.getItem('lotofacil'));
+    allGames = JSON.parse(localStorage.getItem('#lotofacil'));
 
     for(let element of allGames) {
         $('#simulatorSelect').append(`
@@ -83,7 +83,7 @@ function searchMatches() {
     }
 
     let matches = [0, 0, 0, 0, 0];
-
+    
     filteredGames.forEach((elem) => {
         let numMatches = 0;
         let game = new Set(elem[1]);

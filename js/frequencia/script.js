@@ -111,6 +111,10 @@ function getRelationsToLoad() {
         return undefined;
     }
 
+    for(let i = 0; i < 5; i++) {
+        relations[`#cj-line${i+1}`] = Number($(`#cj-line${i+1}`).val(), 10);
+    }
+
     for(var i = 0; i < 5; i++) {
         let char = 'A';
         let ch = char.charCodeAt(0);
