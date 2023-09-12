@@ -14,7 +14,7 @@ function guid() {
 
 let lastAlert = undefined;
 
-function genAlert(type, message) {
+function genAlert(type, message, resumeTime) {
     if(lastAlert) {
         $('#' + lastAlert).remove();
     }
@@ -34,6 +34,13 @@ function genAlert(type, message) {
         $('#' + alertGuid).remove();
     });
 
+    setTimeout(function() {
+        let node = $('#' + alertGuid);
+        if(node) {
+            node.remove();
+        }
+    }, resumeTime);
+
     lastAlert = alertGuid;
 }
 
@@ -42,7 +49,36 @@ function loadSelectedOption() {
 
     if(localStorage.getItem(select)) {
         loadConfig(select);
-        genAlert('success', 'Carregado com sucesso!');
+        genAlert('success', 'Carregado com sucesso!', 3000);
+    }
+}
+
+function loadSelectedOptionRepetidos() {
+    let select = $('#repetidosConcurso').val();
+
+    repeated.clear();
+
+    const repeatedArray = allGamesMap[select];
+    for(let i = 0; i < repeatedArray.length; i++) repeated.add(Number(repeatedArray[i]));
+}
+
+let s = 0;
+
+function fillSelectRepetidos() {
+    let select = $('#repetidosConcurso').val();
+
+    $('#repetidosConcurso').html('');
+
+    $('#repetidosConcurso').append(`
+        <option ${select ? '' : 'selected'}> Escolher concurso </option>
+    `);
+
+    let allGames = JSON.parse(localStorage.getItem('#lotofacil'));
+    
+    for(let element of allGames) {
+        $('#repetidosConcurso').append(`
+            <option ${select == element[0] ? 'selected' : ''}>${element[0]} </option>
+        `);
     }
 }
 
@@ -77,10 +113,15 @@ function loadConfig(configName) {
         if(id == '#cj-line5') {
             genContentLine();
         }
+
     }
 
     for(var [id, value] of Object.entries(config.filters)) {
         $(id).val(value);
+
+        if(id == '#repetidosConcurso') {
+            loadSelectedOptionRepetidos();
+        }
     }
 
     includedNumbers = config.included;
@@ -99,7 +140,7 @@ function saveConfig() {
         }
     
         localStorage.setItem(name, JSON.stringify(config));
-        genAlert('primary', 'Salvo!');
+        genAlert('primary', 'Salvo!', 3000);
     }
 
 }
@@ -110,7 +151,8 @@ function removerConfig() {
     console.log(configName);
 
     localStorage.removeItem(configName);
-    genAlert('success', 'Configuração apagada!');
+    genAlert('success', 'Configuração apagada!', 3000);
 }
 
 fillSelect();
+fillSelectRepetidos();

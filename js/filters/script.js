@@ -19,7 +19,15 @@ function genFilters(filters) {
                         <input type="number" id="${id + '-max'}" class="form-control" placeholder="maximo" value="3000">
                         <label for="${id + '-max'}" class="mt-1 me-2 text-danger"> max </label>
                     </div>
+
                 </div>
+
+                ${name == "Repetidos" ?
+                    `<div class="form-floating mb-2 mt-2 d-flex col-12">
+                        <select class="form-select-sm col-12" id="repetidosConcurso" onchange="loadSelectedOptionRepetidos()" onclick="fillSelectRepetidos()">
+                        </select>
+                    </div>` : ''
+                }
             </div>
         </div>`);
 
@@ -49,6 +57,10 @@ function getRestrictionsToLoad() {
         let min = $(`#${restrictionsName[i] + '-' + 'min'}`).val();
         let max = $(`#${restrictionsName[i] + '-' + 'max'}`).val();
 
+        if(restrictionsName[i] == 'repetidos') {
+            restrictions[`#repetidosConcurso`] = $('#repetidosConcurso').val();
+        } 
+
         restrictions[`#${restrictionsName[i] + '-' + 'min'}`] = min;
         restrictions[`#${restrictionsName[i] + '-' + 'max'}`] = max;
     }
@@ -65,6 +77,7 @@ function getRestrictions() {
     for(var i = 0; i < filters.length; i++) {
         let min = $(`#${restrictionsName[i] + '-' + 'min'}`).val();
         let max = $(`#${restrictionsName[i] + '-' + 'max'}`).val();
+
         restrictions[restrictionsName[i]] = [Number(min), Number(max)];
     }
 

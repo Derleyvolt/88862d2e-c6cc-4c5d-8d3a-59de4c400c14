@@ -377,6 +377,9 @@ function showModal(element) {
 function getFilteredGames() {
     let edges        = getRelations();
     let restrictions = getRestrictions();
+    
+    console.log(edges);
+    console.log(restrictions);
 
     let result = calcGames(restrictions, edges, last_cjl);
 
@@ -408,7 +411,6 @@ function fillTable() {
     let len = filteredGames.length;
 
     $('.pagination').html('');
-
 
     pagination = new Pagination(len, resultsPerPage, 5, 'pagination', filteredGames);
 

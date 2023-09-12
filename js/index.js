@@ -14,12 +14,14 @@ for(let i = 0; i < fibArray.length; i++) fib.add(fibArray[i]);
 
 const repeated = new Set();
 
-fetch('https://loteriascaixa-api.herokuapp.com/api/lotofacil/latest')
-.then(res => res.json())
-.then(res => {
-    const repeatedArray = res.dezenas;
-    for(let i = 0; i < repeatedArray.length; i++) repeated.add(Number(repeatedArray[i]));
-});
+// function loadRepeteatedContest(contest) {
+//     fetch(`https://loteriascaixa-api.herokuapp.com/api/lotofacil/${contest}`)
+//     .then(res => res.json())
+//     .then(res => {
+//         const repeatedArray = res.dezenas;
+//         for(let i = 0; i < repeatedArray.length; i++) repeated.add(Number(repeatedArray[i]));
+//     });
+// }
 
 function check_even(game, restrictions){
     let tot_even = 0;
