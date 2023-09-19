@@ -15,7 +15,7 @@ function genLinearBalls(nodeId, callback, range, preSelectedBalls, multiple, min
         `)
 
         $(`#${nodeId}${i}`).on('click', function() {
-            if(selectedBalls[`#${nodeId}${i}`]) {
+            if(selectedBalls[`#${nodeId}${i}`] != undefined) {
                 console.log(selectedBalls);
                 if(Object.keys(selectedBalls).length > minOfSelections) {
                     $(this).removeClass('bg-success');

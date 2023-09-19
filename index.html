@@ -65,6 +65,19 @@
                                                 <small id="13Acertos">13 Acertos: 0</small> <br>
                                                 <small id="14Acertos">14 Acertos: 0</small> <br>
                                                 <small id="15Acertos">15 Acertos: 0</small> <br>
+                                                <hr style="width:300px">
+                                                <div id="resultadoLotoFacil">
+                                                    <p class="m-0">Total de jogos com acertos: 0</p>
+                                                    <p class="m-0">Total de jogos com erros: 0</p>
+                                                    <p class="m-0">Total de jogos: 0</p>
+                                                </div>
+                                                <hr style="width:300px">
+                                                <h2> Ganhos e Perdas </h2>
+                                                <div id="perdasEganhos">
+                                                </div>
+                                                <button class='btn btn-dark mt-2' onclick="openModalConfigPremios(event)">
+                                                    Configurar Prêmios
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -252,9 +265,6 @@
                 </div>
             </div>
         </div>
-
-        <select class="form-select" id="repetidosConcurso" onchange="loadSelectedOptionRepetidos()" onclick="fillSelectRepetidos()">
-        </select>
 
         <script src="./js/script.js"></script>
         <script src="./js/index.js"></script>
