@@ -374,40 +374,97 @@ function showModal(element) {
     $('#myModal').modal('show');
 }
 
+function filterIncludedExcluded(arr){
+    for(var e of excludedNumbers) {
+        if (arr[1].indexOf(e) != -1) {
+            return false;
+        }
+    }
+
+    for(var e of includedNumbers) {
+        if (arr[1].indexOf(e) == -1) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 function getFilteredGames() {
     let edges        = getRelations();
     let restrictions = getRestrictions();
-    
+    let aux_cj = [...last_cjl];
+    let prefix = [last_cjl[0]];
+    for(let i = 1; i < last_cjl.length; i++) prefix.push(prefix[i-1]+last_cjl[i]);
+    for(let i = 4; i >= 0; i--){
+        if(aux_cj[i] == 0){
+            edges.splice(prefix[i], 0, []);
+            aux_cj[i] = 1;
+        }
+    }
+
     console.log(edges);
-    console.log(restrictions);
 
-    let result = calcGames(restrictions, edges, last_cjl);
-
-    result = result.filter((arr) => {
-        for(var e of excludedNumbers) {
-            if (arr[1].indexOf(e) != -1) {
-                return false;
-            }
-        }
-
-        for(var e of includedNumbers) {
-            if (arr[1].indexOf(e) == -1) {
-                return false;
-            }
-        }
-
-        return true;
-    });
+    let result = calcGames(restrictions, edges, aux_cj);
+    result = result.filter(filterIncludedExcluded);
 
     return result;
+}
+
+let pos = [[0], [0], [0], [0], [0]];
+let comb = [
+    [[]],
+    [[1], [2], [3], [4], [5]],
+    [[1, 2], [1, 3], [1, 4], [1, 5], [2, 3], [2, 4], [2, 5], [3, 4], [3, 5], [4, 5]],
+    [[1, 2, 3], [1, 2, 4], [1, 2, 5], [1, 3, 4], [1, 3, 5], [1, 4, 5], [2, 3, 4], [2, 3, 5], [2, 4, 5], [3, 4, 5]],
+    [[1, 2, 3, 4], [1, 2, 3, 5], [1, 2, 4, 5], [1, 3, 4, 5], [2, 3, 4, 5]],
+    [[1, 2, 3, 4, 5]]
+];
+
+function generateCombs(choose, sum){
+    let combs = [];
+    for(let i = 0; i < comb[choose].length; i++){
+        let c = [];
+        for(let j = 0; j < choose; j++){
+            c.push(comb[choose][i][j]+sum);
+        }
+        combs.push(c);
+    }
+    return combs;
+}
+
+function generatePossibilities(){
+    let results = [];
+    let restrictions = getRestrictions();
+    for(let a = 0; a < pos[0].length; a++){
+        let pa = pos[0][a];
+        for(let b = 0; b < pos[1].length; b++){
+            let pb = pos[1][b];
+            for(let c = 0; c < pos[2].length; c++){
+                let pc = pos[2][c];
+                for(let d = 0; d < pos[3].length; d++){
+                    let pd = pos[3][d];
+                    for(let e = 0; e < pos[4].length; e++){
+                        let pe = pos[4][e];
+                        if(pa+pb+pc+pd+pe != dezenas) continue;
+                        let tot_cjs = [comb[pa].length, comb[pb].length, comb[pc].length, comb[pd].length, comb[pe].length];
+                        const comba = generateCombs(pa, 0), combb = generateCombs(pb, 5), combc = generateCombs(pc, 10), combd = generateCombs(pd, 15), combe = generateCombs(pe, 20);
+                        let edges = []; edges.push(...comba); edges.push(...combb); edges.push(...combc); edges.push(...combd); edges.push(...combe);
+                        let result = calcGames(restrictions, edges, tot_cjs);
+                        result = result.filter(filterIncludedExcluded);
+                        results.push(...result);
+                    }
+                }
+            }
+        }
+    }
+    return results;
 }
 
 var pagination;
 let filteredGames = [];
 
 function fillTable() {
-    filteredGames = getFilteredGames();
-
     let len = filteredGames.length;
 
     $('.pagination').html('');
@@ -423,4 +480,14 @@ function fillTable() {
     }
 
     alert(filteredGames.length + " jogos foram gerados!");
+}
+
+function fillTableFrequency(){
+    filteredGames = getFilteredGames();
+    fillTable();
+}
+
+function fillTablePossibilities(){
+    filteredGames = generatePossibilities();
+    fillTable();
 }
