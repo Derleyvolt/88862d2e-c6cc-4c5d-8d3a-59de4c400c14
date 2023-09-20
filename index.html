@@ -241,7 +241,7 @@
                                 </div>
                                 <div class="d-flex flex-row-reverse col-8">
                                     <div class="col-8 ms-3 mw-25">
-                                        <input id="configName"class="form-control" type="text" placeholder="Digite o nome">
+                                        <input id="configName"class="form-control" type="text" placeholder="Digite o Nome">
                                     </div>
                                     <button class="btn btn-secondary" onclick="saveConfig()"> Salvar </button>
                                 </div>
@@ -255,8 +255,16 @@
                                 </div>
 
                                 <div>
-                                    <button class="btn btn-dark mt-2" onclick="removerConfig()">
-                                        Remover configuração atual
+                                    <button class="btn btn-dark mt-2 mb-2" onclick="removerConfig()">
+                                        Remover Configuração Atual
+                                    </button>
+                                </div>
+                                <div class="col-12">
+                                    <input id="downloadSheet"class="form-control" type="text" placeholder="Digite o Nome da Planilha">
+                                </div>
+                                <div>
+                                    <button class="btn btn-dark mt-2" onclick="downloadGames()">
+                                        Gerar Planilha
                                     </button>
                                 </div>
                             </div>
@@ -266,12 +274,13 @@
             </div>
         </div>
 
-        <script src="./js/script.js"></script>
         <script src="./js/index.js"></script>
         <script src="./js/filters/script.js"></script>
         <script src="./js/quintuplas/script.js"></script>
+        <script src="./js/load.js"></script>
         <script src="./js/frequencia/script.js"></script>
         <script src="./js/simulator/script.js"></script>
         <script src="./js/possibilidades/script.js"></script>
+        <script src="./js/script.js"></script>
     </body>
 </html>

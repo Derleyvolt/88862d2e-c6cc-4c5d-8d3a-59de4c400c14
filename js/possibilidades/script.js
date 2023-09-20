@@ -20,15 +20,13 @@ function getBallsPossibilities5(balls) {
     pos[4] = balls;
 }
 
-let callbacks = [(balls) => {pos[0] = balls; console.log(balls) }, (balls) => pos[1] = balls, 
+let callbacks = [(balls) => {pos[0] = balls; }, (balls) => pos[1] = balls, 
                  (balls) => pos[2] = balls, (balls) => pos[3] = balls,
                  (balls) => pos[4] = balls]
 
 function genLinesPossibilities() {
-    let selectedBalls = [];
     for(let i = 0; i < 5; i++) {
-        selectedBalls.push({});
-        genLinearBalls(`line-poss-${i+1}`, callbacks[i], [0, 5], [0], true, 1, selectedBalls[i]);
+        genLinearBalls(`line-poss-${i+1}`, callbacks[i], [0, 5], [0], true, 1);
     }
 }
 

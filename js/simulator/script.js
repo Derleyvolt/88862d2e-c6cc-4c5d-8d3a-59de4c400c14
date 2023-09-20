@@ -58,8 +58,6 @@ function drawResultInDOM(nodeId, result) {
     }
 }
 
-fillSimulatorSelect();
-
 let choisenGame = [];
 
 function selectGame(elem) {

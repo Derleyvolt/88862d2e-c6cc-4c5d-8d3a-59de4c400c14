@@ -491,3 +491,22 @@ function fillTablePossibilities(){
     filteredGames = generatePossibilities();
     fillTable();
 }
+
+function gerarString(){
+    let jogos = ";D1;D2;D3;D4;D5;D6;D7;D8;D9;D10;D11;D12;D13;D14;C15;D00\n"
+    for(let i = 0; i < filteredGames.length; i++)
+        jogos += `Jogo ${i+1};`+filteredGames[i][1].join(';')+';0\n'
+    return jogos;
+}
+
+function downloadGames(){
+    let jogos = gerarString();
+
+    let blob = new Blob([jogos], { type: 'text/csv' });
+
+    let downloadLink = document.createElement('a');
+    downloadLink.href = window.URL.createObjectURL(blob);
+    downloadLink.download = document.getElementById("downloadSheet").value+".csv";
+
+    downloadLink.click();
+}

@@ -1,43 +1,3 @@
-function genLinearBalls(nodeId, callback, range, preSelectedBalls, multiple, minOfSelections) {
-    let selectedBalls = {};
-
-    preSelectedBalls = new Set(preSelectedBalls);
-
-    for(let i = range[0]; i <= range[1]; i++) {
-        $('#'+nodeId).append(`
-            <button class="btn rounded-circle border ms-2 ${preSelectedBalls.has(i) ? 
-                (() => {
-                    selectedBalls[`#${nodeId}${i}`] = i;
-                    return 'bg-success';
-                })() : ''}" id="${nodeId}${i}">
-                ${i}
-            </button>
-        `)
-
-        $(`#${nodeId}${i}`).on('click', function() {
-            if(selectedBalls[`#${nodeId}${i}`] != undefined) {
-                console.log(selectedBalls);
-                if(Object.keys(selectedBalls).length > minOfSelections) {
-                    $(this).removeClass('bg-success');
-                    delete selectedBalls[`#${nodeId}${i}`];
-                }
-            } else {
-                $(this).addClass('bg-success');
-
-                if(!multiple) {
-                    let lastSelectedBall = Object.keys(selectedBalls)[0];
-                    $(lastSelectedBall).removeClass('bg-success');
-                    delete selectedBalls[lastSelectedBall];
-                }
-
-                selectedBalls[`#${nodeId}${i}`] = i;
-            }
-
-            callback(Object.entries(selectedBalls).map(e => e[1]));
-        });
-    }
-}
-
 function guid() {
     function randomLetter() {
         return 'A'.charCodeAt(0) + Math.floor(Math.random() * 26);
@@ -87,13 +47,17 @@ function loadSelectedOption() {
     }
 }
 
-function loadSelectedOptionRepetidos() {
+async function loadSelectedOptionRepetidos() {
     let select = $('#repetidosConcurso').val();
 
     repeated.clear();
 
     const repeatedArray = allGamesMap[select];
-    for(let i = 0; i < repeatedArray.length; i++) repeated.add(Number(repeatedArray[i]));
+    try {
+        for(let i = 0; i < repeatedArray.length; i++) repeated.add(Number(repeatedArray[i]));
+    } catch(err) {
+        console.log(err);
+    }
 }
 
 let s = 0;
@@ -116,9 +80,11 @@ function fillSelectRepetidos() {
     }
 }
 
-function fillSelect() {
-    let select = $('#selectConfig').val();
+async function fillSelect() {
+    await fillSimulatorSelect();
 
+    let select = $('#selectConfig').val();
+    
     $('#selectConfig').html('');
 
     $('#selectConfig').append(`
@@ -147,7 +113,6 @@ function loadConfig(configName) {
         if(id == '#cj-line5') {
             genContentLine();
         }
-
     }
 
     for(var [id, value] of Object.entries(config.filters)) {
@@ -158,8 +123,22 @@ function loadConfig(configName) {
         }
     }
 
+    for(var [id, value] of Object.entries(config.premiosPreco)) {
+        console.log(id, value);
+        $(id).val(value);
+    }
+
+    for(let i = 0; i < config.possibilidades.length; i++) {
+        genLinearBalls(`line-poss-${i+1}`, callbacks[i], [0, 5], config.possibilidades[i], true, 1);
+    }
+
     includedNumbers = config.included;
     excludedNumbers = config.excluded;
+    dezenas         = config.numeroDezenas;
+
+    genLinearBalls('number-of-balls', (res) => {
+        dezenas = res[0];
+    }, [15, 20], [dezenas], false, 1);
 }
 
 function saveConfig() {
@@ -171,12 +150,20 @@ function saveConfig() {
             relations: getRelationsToLoad(),
             excluded: excludedNumbers,
             included: includedNumbers,
+            numeroDezenas: dezenas,
+            premiosPreco: {
+                '#configPremio1': Number($('#configPremio1').val()),
+                '#configPremio2': Number($('#configPremio2').val()),
+                '#configPremio3': Number($('#configPremio3').val()),
+                '#configPremio4': Number($('#configPremio4').val()),
+                '#configPremio5': Number($('#configPremio5').val()),
+            },
+            possibilidades: [pos[0], pos[1], pos[2], pos[3], pos[4]],
         }
-    
+        
         localStorage.setItem(name, JSON.stringify(config));
         genAlert('primary', 'Salvo!', 3000);
     }
-
 }
 
 function removerConfig() {
@@ -190,15 +177,3 @@ function removerConfig() {
 
 fillSelect();
 fillSelectRepetidos();
-
-genLinearBalls('number-of-balls', (res) => {
-    dezenas = res[0];
-}, [15, 20], [15], false, 1);
-
-// genLinearBalls
-// param1: id do node
-// param2: callback
-// param3: intervalo
-// param4: lista de bolas selecionadas
-// param5: permite multiseleção
-// param6: número mínimo de bolas que devem estar selecionadas.
