@@ -257,7 +257,7 @@ function genModal(game) {
         </div>
         <div class="d-flex ">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
-        </div>
+        </div> 
     </div>
 </div>
 </div>
