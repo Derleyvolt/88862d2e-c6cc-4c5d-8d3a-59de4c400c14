@@ -124,13 +124,16 @@ function loadConfig(configName) {
     }
 
     for(var [id, value] of Object.entries(config.premiosPreco)) {
-        console.log(id, value);
         $(id).val(value);
     }
 
     for(let i = 0; i < config.possibilidades.length; i++) {
         pos[i] = config.possibilidades[i];
-        genLinearBalls(`line-poss-${i+1}`, callbacks[i], [0, 5], config.possibilidades[i], true, 1);
+        genLinearBalls(`line-poss-${i+1}`, callbackList[i], [0, 5], config.possibilidades[i], true, 1);
+    }
+
+    for(var [id, value] of Object.entries(config.analise_frequencia)) {
+        $(id).val(value);
     }
 
     includedNumbers = config.included;
@@ -143,6 +146,7 @@ function loadConfig(configName) {
 }
 
 function saveConfig() {
+    alert('xx');
     let name = $('#configName').val();
 
     if(name.length) {
@@ -160,6 +164,13 @@ function saveConfig() {
                 '#configPremio5': Number($('#configPremio5').val()),
             },
             possibilidades: [pos[0], pos[1], pos[2], pos[3], pos[4]],
+            analise_frequencia: {
+                '#analise-freq1': Number($('#analise-freq1').val()),
+                '#analise-freq2': Number($('#analise-freq2').val()),
+                '#analise-freq3': Number($('#analise-freq3').val()),
+                '#analise-freq4': Number($('#analise-freq4').val()),
+                '#analise-freq5': Number($('#analise-freq5').val()),
+            }
         }
         
         localStorage.setItem(name, JSON.stringify(config));

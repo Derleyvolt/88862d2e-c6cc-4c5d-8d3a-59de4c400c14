@@ -493,7 +493,9 @@ function fillTablePossibilities(){
 }
 
 function gerarString(){
-    let jogos = ";D1;D2;D3;D4;D5;D6;D7;D8;D9;D10;D11;D12;D13;D14;C15;D00\n"
+    let jogos = ";";
+    for(let i = 1; i <= dezenas; i++) jogos += 'D'+i+';';
+    jogos += 'D00\n'
     for(let i = 0; i < filteredGames.length; i++)
         jogos += `Jogo ${i+1};`+filteredGames[i][1].join(';')+';0\n'
     return jogos;
