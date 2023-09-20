@@ -129,6 +129,7 @@ function loadConfig(configName) {
     }
 
     for(let i = 0; i < config.possibilidades.length; i++) {
+        pos[i] = config.possibilidades[i];
         genLinearBalls(`line-poss-${i+1}`, callbacks[i], [0, 5], config.possibilidades[i], true, 1);
     }
 
