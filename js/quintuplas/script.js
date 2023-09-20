@@ -153,11 +153,11 @@ function genModalToChoice(type) {
             color = 'btn-danger';
         }
 
-        $('#contentNumbers1').append(`
-<button class="btn rounded-circle border ${color}" id="${btnId}">
-${(i+1) < 10 ? '0' + (i+1) : i+1}
-</button>
-`);
+                $('#contentNumbers1').append(`
+        <button class="btn rounded-circle border ${color}" id="${btnId}">
+        ${(i+1) < 10 ? '0' + (i+1) : i+1}
+        </button>
+        `);
 
         $('#'+btnId).on('click', function(event) {
             if(this.classList.contains('btn-success') && type=='include') {
@@ -231,7 +231,9 @@ function genModal(game) {
 <div class="modal-dialog modal-dialog-centered" role="document">
 <div class="modal-content">
 <div class="modal-header">
-<h5 class="modal-title text-center">Jogo ${game.numberGame}</h5>
+    <div class="d-flex col-12 justify-content-center">
+        <h4 class="modal-title text-center text-danger text-center">Jogo ${game.numberGame}</h4>
+    </div>
 </div>
 
 <div class="modal-body">
@@ -249,10 +251,14 @@ function genModal(game) {
 </div>
 
 <div class="modal-footer">
-
-<div class="d-flex ">
-<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
-</div>
+    <div class="d-flex col-12">
+        <div class="d-flex justify-content-start col-10">
+            <h4 class="text-left ms-3"> ${game.contest ? '    Concurso: ' + game.contest : ''} </h4>
+        </div>
+        <div class="d-flex ">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
+        </div>
+    </div>
 </div>
 </div>
 </div>
@@ -364,7 +370,8 @@ function showModal(element) {
 
     const game = {
         numberGame: (page * pagination._rowsPerPage) + rowIndex,
-        numbers: content[1]
+        numbers: content[1],
+        contest: content[2],
     }
 
     $('#myModal').remove();

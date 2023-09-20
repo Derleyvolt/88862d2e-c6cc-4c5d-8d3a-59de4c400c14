@@ -32,9 +32,9 @@ function searchGamesByFrequency() {
         return true;
     }
 
-    for(let [_, game] of allGames) {
+    for(let [contest, game] of allGames) {
         if(compare(getFrequency(game), frequency)) {
-            filteredGames.push([game.slice(0, 5), game]);
+            filteredGames.push([game.slice(0, 5), game, contest]);
         }
     }
 
